@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comité Académico</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body data-bs-theme="dark">
+    <nav class="navbar navbar-expand-lg bg-body-secondary">
+        <div class="container-fluid">
+            <a class="navbar-brand fs-3 fw-bold" href="index.html">ORIZON</a>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="index.html">Gestión de Cursos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="learningUnits.html">Unidades de aprendizaje</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="courseRecords.html">Cursos</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h2 class="mb-4">Registros de cursos</h2>
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center">Cuatrimestre</th>
+                        <th class="text-center">Carrera</th>
+                        <th>Objetivos Generales</th>
+                        <th class="text-center">Semanas</th>
+                        <th class="text-center">Más detalle</th>
+                    </tr>
+                </thead>
+                <tbody id="recordsList">
+                    <!-- Records will be dynamically added here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal fade" id="detailModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailModalLabel">Course Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modalContent">
+                    <!-- Detailed information will be dynamically added here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="courseRecords.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

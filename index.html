@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comité Académico</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body data-bs-theme="dark">
+    <nav class="navbar navbar-expand-lg bg-body-secondary">
+        <div class="container-fluid">
+            <a class="navbar-brand fs-3 fw-bold" href="index.html">ORIZON</a>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="index.html">Gestión de Cursos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="learningUnits.html">Unidades de aprendizaje</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="courseRecords.html">Cursos</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="card mx-auto" style="width: 60rem;">
+            <h2 class="card-header">Gestión de Cursos</h2>
+            <div class="card-body">
+                <form id="courseForm">
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="subject" class="form-label">Materías/Asignaturas</label>
+                            <select class="form-select" id="courses_select" required>
+                                <option value="">Selecciona una matería</option>
+                                <option value="Matemáticas">Matemáticas</option>
+                                <option value="Base de Datos">Base de Datos</option>
+                                <option value="Inglés">Inglés</option>
+                                <option value="Desarollo Web">Desarrollo Web</option>
+                                <option value="Administración_del_tiempo">Administración del tiempo</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="professor" class="form-label">Profesor asignado</label>
+                            <input type="text" class="form-control" id="professor_input" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="duration" class="form-label">Total de Horas</label>
+                            <input type="number" class="form-control" id="duration_input" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="careerFamily" class="form-label">Familia de Carreras</label>
+                            <select class="form-select" id="careerFamily_select" required>
+                                <option value="">Selecciona las carreras</option>
+                                <option value="TIC">TIC</option>
+                                <option value="Administración">Administración</option>
+                                <option value="Industrial">Industrial</option>
+                                <option value="Mecánica">Mecánica</option>
+                                <option value="Ciberseguridad">Ciberseguridad</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="quarter" class="form-label">Cuatrimestre</label>
+                            <select class="form-select" id="quarter_select" required>
+                                <option value="">Selecciona un cuatrimestre</option>
+                                <option value="1">1st</option>
+                                <option value="2">2nd</option>
+                                <option value="3">3rd</option>
+                                <option value="4">4th</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="learningUnits" class="form-label">Unidades de Aprendizaje</label>
+                            <select class="form-select" id="learningUnits_select" required>
+                                <option value="">Selecciona el número de unidades</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="competenceLevel" class="form-label">Nivel de Competencia</label>
+                        <textarea class="form-control" id="competenceLevel_textarea" rows="3" required></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="generalObjective" class="form-label">Objetivos Generales</label>
+                        <textarea class="form-control" id="generalObjective_textarea" rows="3" required></textarea>
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary w-25">Enviar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="fetchScript.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

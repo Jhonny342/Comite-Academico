@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comité Académico</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body data-bs-theme="dark">
+    <div class="container mt-5">
+        <h1 class="mb-4">Course Management</h1>
+
+        <!-- Form -->
+        <form id="courseForm" class="mb-5">
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <label for="subject" class="form-label">Subject/Course</label>
+                    <select class="form-select" id="subject" required>
+                        <option value="">Select a subject</option>
+                        <option value="mathematics">Mathematics</option>
+                        <option value="database">Database</option>
+                        <option value="mobile_devices">Mobile Devices</option>
+                        <option value="oral_written_expression">Oral and Written Expression</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="professor" class="form-label">Assigned Professor</label>
+                    <input type="text" class="form-control" id="professor" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="duration" class="form-label">Total Hours</label>
+                    <input type="number" class="form-control" id="duration" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="careerFamily" class="form-label">Career Family</label>
+                    <select class="form-select" id="careerFamily" required>
+                        <option value="">Select a career family</option>
+                        <option value="tic">TIC</option>
+                        <option value="administration">Administration</option>
+                        <option value="industrial">Industrial</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="quarter" class="form-label">Quarter</label>
+                    <select class="form-select" id="quarter" required>
+                        <option value="">Select a quarter</option>
+                        <option value="1">1st</option>
+                        <option value="2">2nd</option>
+                        <option value="3">3rd</option>
+                        <option value="4">4th</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="learningUnits" class="form-label">Learning Units</label>
+                    <select class="form-select" id="learningUnits" required>
+                        <option value="">Select number of units</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="competenceLevel" class="form-label">Competence Level</label>
+                <textarea class="form-control" id="competenceLevel" rows="3" required></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="generalObjective" class="form-label">General Objective</label>
+                <textarea class="form-control" id="generalObjective" rows="3" required></textarea>
+            </div>
+
+            <div id="learningUnitsContainer">
+                <!-- Learning units will be dynamically added here -->
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        <!-- Records List -->
+        <h2 class="mb-3">Course Records</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Quarter</th>
+                    <th>Subject</th>
+                    <th>General Objective</th>
+                    <th>Weeks</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="recordsList">
+                <!-- Records will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal for detailed information -->
+    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailModalLabel">Course Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modalContent">
+                    <!-- Detailed information will be dynamically added here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

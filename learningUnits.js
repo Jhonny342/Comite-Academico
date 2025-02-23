@@ -28,22 +28,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   );
 
-  const infoModal = new bootstrap.Modal(document.getElementById("infoModal"), {
-    backdrop: "static",
-  });
+  const infoModal = new bootstrap.Modal(document.getElementById("infoModal"));
 
   const helperModal = new bootstrap.Modal(
-    document.getElementById("helperModal"),
-    {
-      backdrop: "static",
-    }
+    document.getElementById("helperModal")
   );
 
   const validationModal = new bootstrap.Modal(
-    document.getElementById("validationModal"),
-    {
-      backdrop: "static",
-    }
+    document.getElementById("validationModal")
   );
 
   ValidateDataUnitsExistInSessionStorage(
@@ -64,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     </div>
                     <div class="mb-2">
                         <label for="weeks${i}" class="form-label">Número de Semanas</label>
-                        <input type="number" class="form-control" id="weeks${i}" required>
+                        <input type="number" class="form-control" id="weeks${i}" required min="1">
                     </div>
                     <div class="mb-2">
                         <label for="learningOutcome${i}" class="form-label">Resultado de Aprendizaje</label>
@@ -81,11 +73,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     <div class="row">
                         <div class="col-md-6 mb-2">
                             <label for="saber${i}" class="form-label">El Saber (%)</label>
-                            <input type="number" class="form-control saber" id="saber${i}" required>
+                            <input type="number" class="form-control saber" id="saber${i}" required min="1">
                         </div>
                         <div class="col-md-6 mb-2">
                             <label for="hacerSer${i}" class="form-label">El Hacer-Ser (%)</label>
-                            <input type="number" class="form-control hacer-ser" id="hacerSer${i}" required>
+                            <input type="number" class="form-control hacer-ser" id="hacerSer${i}" required min="1">
                         </div>
                     </div>
                 </div>
@@ -93,6 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
         `;
     learningUnitsContainer.insertAdjacentHTML("beforeend", unitHtml);
   }
+  ValidateNumbersPercent();
 
   ClickButtonEvent(
     postUnitsButton,
@@ -105,6 +98,17 @@ document.addEventListener("DOMContentLoaded", function () {
     validationModal
   );
 });
+
+function ValidateNumbersPercent() {
+  document.querySelectorAll('input[type="number"]').forEach((input) => {
+    input.addEventListener("input", function () {
+      this.value = this.value.replace(/[^0-9]/g, "");
+      if (this.value < 1) {
+        this.value = 1;
+      }
+    });
+  });
+}
 
 function ClickButtonEvent(
   postUnitsButton,

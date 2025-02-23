@@ -1,75 +1,84 @@
-document.addEventListener('DOMContentLoaded', async function () {
-    const recordsList = document.getElementById('recordsList');
-    const URL = "https://apiflowershop.onrender.com/api/asignaturas";
-
-    async function fetchAssignments() {
-        try {
-            // Realizamos la solicitud para obtener las asignaturas
-            const response = await fetch(URL);
-
-            if (!response.ok) {
-                throw new Error("Fallo al obtener asignaturas");
-            }
-
-            // Parseamos la respuesta a JSON
-            const data = await response.json();
-
-            // Suponiendo que 'data' es un array de asignaturas, extraemos sus IDs
-            const ids = data.map(asignatura => asignatura.id_asignaturas);
-
-            // Llamamos a fetchWeeks para cada asignatura con su ID
-            for (const id of ids) {
-                const weeks = await fetchWeeks(id);
-            }
-
-        } catch (error) {
-            console.error("Error al obtener las asignaturas:", error);
-        }
+document.addEventListener("DOMContentLoaded", async function () {
+  const recordsList = document.getElementById("recordsList");
+  const URL = "https://apiflowershop.onrender.com/api/asignaturas";
+  const loadingModal = new bootstrap.Modal(
+    document.getElementById("loadingModal"),
+    {
+      backdrop: "static",
     }
-
-    async function fetchWeeks(id_asignaturas) {
-        try {
-            const response = await fetch(`${URL}/${id_asignaturas}`);
-
-            if (!response.ok) {
-                throw new Error("Fallo al obtener detalles de la asignatura");
-            }
-
-            const data = await response.json();
-
-            if (data.unidadesAp && Array.isArray(data.unidadesAp)) {
-                return data.unidadesAp.reduce((total, unidad) => {
-                    return total + (unidad.Semanas || 0);
-                }, 0);
-            }
-
-            console.log("No se encontraron unidadesAp válidas");
-            return 0;
-        } catch (error) {
-            console.error("Error al obtener las semanas:", error);
-            return 0;
-        }
+  );
+  const errorModal = new bootstrap.Modal(
+    document.getElementById("errorModal"),
+    {
+      backdrop: "static",
     }
+  );
 
-    // Llamamos a la función principal para iniciar el proceso
-    fetchAssignments();
+  loadingModal.show();
 
+  async function fetchAssignments(loadingModal, errorModal) {
+    try {
+      const response = await fetch(URL);
 
-    async function fetchData() {
-        try {
-            const response = await fetch(URL);
-            if (!response.ok) {
-                throw new Error("Ocurrió un error durante la solicitud GET");
-            }
-            const data = await response.json();
+      if (!response.ok) {
+        throw new Error("Fallo al obtener asignaturas");
+      }
+      const data = await response.json();
+      const ids = data.map((asignatura) => asignatura.id_asignaturas);
 
-            if (data && data.length > 0) {
-                recordsList.innerHTML = "";
+      for (const id of ids) {
+        const weeks = await fetchWeeks(id);
+      }
+    } catch (error) {
+      loadingModal.hide();
+      errorModal.show();
+      console.error("Error al obtener las asignaturas:", error);
+    } finally {
+      loadingModal.hide();
+    }
+  }
 
-                for (const record of data) {
-                    const Semanas = await fetchWeeks(record.id_asignaturas);
+  async function fetchWeeks(id_asignaturas) {
+    try {
+      const response = await fetch(`${URL}/${id_asignaturas}`);
 
-                    const row = `
+      if (!response.ok) {
+        throw new Error("Fallo al obtener detalles de la asignatura");
+      }
+
+      const data = await response.json();
+
+      if (data.unidadesAp && Array.isArray(data.unidadesAp)) {
+        return data.unidadesAp.reduce((total, unidad) => {
+          return total + (unidad.Semanas || 0);
+        }, 0);
+      }
+
+      console.log("No se encontraron unidadesAp válidas");
+      return 0;
+    } catch (error) {
+      console.error("Error al obtener las semanas:", error);
+      return 0;
+    }
+  }
+
+  fetchAssignments(loadingModal, errorModal);
+
+  async function fetchData() {
+    try {
+      const response = await fetch(URL);
+      if (!response.ok) {
+        throw new Error("Ocurrió un error durante la solicitud GET");
+      }
+      const data = await response.json();
+
+      if (data && data.length > 0) {
+        recordsList.innerHTML = "";
+
+        for (const record of data) {
+          const Semanas = await fetchWeeks(record.id_asignaturas);
+
+          const row = `
                         <tr>
                             <td class="text-center">${record.Cuatrimestre}</td>
                             <td class="text-center">${record.Familia_carrera}</td>
@@ -78,47 +87,53 @@ document.addEventListener('DOMContentLoaded', async function () {
                             <td class="text-center"><button class="btn btn-info btn-sm" onclick="showDetails(${record.id_asignaturas})">Detalles</button></td>
                         </tr>
                     `;
-                    recordsList.insertAdjacentHTML('beforeend', row);
-                }
-            } else {
-                console.warn("No se encontraron asignaturas.");
-            }
-        } catch (error) {
-            console.error("Error al obtener los datos:", error);
+          recordsList.insertAdjacentHTML("beforeend", row);
         }
+      } else {
+        console.warn("No se encontraron asignaturas.");
+      }
+    } catch (error) {
+      console.error("Error al obtener los datos:", error);
     }
+  }
 
-    await fetchData();
+  await fetchData();
 });
 
 async function showDetails(id_asignatura) {
-    try {
-        const response = await fetch(`https://apiflowershop.onrender.com/api/asignaturas/${id_asignatura}`);
-        if (!response.ok) {
-            throw new Error("Error al obtener los detalles de la asignatura");
-        }
-        const data = await response.json();
+  try {
+    const response = await fetch(
+      `https://apiflowershop.onrender.com/api/asignaturas/${id_asignatura}`
+    );
+    if (!response.ok) {
+      throw new Error("Error al obtener los detalles de la asignatura");
+    }
+    const data = await response.json();
 
-        // Generar las filas dinámicas para las unidades de aprendizaje
-        let unidadesApRows = '';
-        if (data.unidadesAp && Array.isArray(data.unidadesAp)) {
-            data.unidadesAp.forEach((unidad, index) => {
-                unidadesApRows += `
+    // Generar las filas dinámicas para las unidades de aprendizaje
+    let unidadesApRows = "";
+    if (data.unidadesAp && Array.isArray(data.unidadesAp)) {
+      data.unidadesAp.forEach((unidad, index) => {
+        unidadesApRows += `
                     <tr>
                         <td>${index + 1}</td> <!-- Número incremental -->
                         <td>${unidad.Competencia}</td>
                         <td>${unidad.Semanas}</td>
                         <td>${unidad.Resultado_aprendizaje}</td>
                         <td>${unidad.Tareas_integradoras}</td>
-                        <td>${parseFloat(unidad.Porcentaje_saber).toFixed(0)}</td>
-                        <td>${parseFloat(unidad.Porcentaje_saber_ser).toFixed(0)}</td>
+                        <td>${parseFloat(unidad.Porcentaje_saber).toFixed(
+                          0
+                        )}</td>
+                        <td>${parseFloat(unidad.Porcentaje_saber_ser).toFixed(
+                          0
+                        )}</td>
                     </tr>
                 `;
-            });
-        }
+      });
+    }
 
-        const modalContent = document.getElementById('modalContent');
-        modalContent.innerHTML = `
+    const modalContent = document.getElementById("modalContent");
+    modalContent.innerHTML = `
         <div class="table-responsive">
             <table class="table table-bordered">
                 <tbody>
@@ -180,9 +195,9 @@ async function showDetails(id_asignatura) {
         </div>
         `;
 
-        const modal = new bootstrap.Modal(document.getElementById('detailModal'));
-        modal.show();
-    } catch (error) {
-        console.error("Error al obtener los detalles de la asignatura:", error);
-    }
+    const modal = new bootstrap.Modal(document.getElementById("detailModal"));
+    modal.show();
+  } catch (error) {
+    console.error("Error al obtener los detalles de la asignatura:", error);
+  }
 }

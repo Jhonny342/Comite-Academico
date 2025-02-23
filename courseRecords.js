@@ -110,10 +110,20 @@ async function showDetails(id_asignatura) {
     }
     const data = await response.json();
 
+    // Variables para acumular los totales
+    let totalSaber = 0;
+    let totalHacerSer = 0;
+    let totalSemanas = 0;
+
     // Generar las filas dinámicas para las unidades de aprendizaje
     let unidadesApRows = "";
     if (data.unidadesAp && Array.isArray(data.unidadesAp)) {
       data.unidadesAp.forEach((unidad, index) => {
+        // Sumar los porcentajes y semanas
+        totalSaber += parseFloat(unidad.Porcentaje_saber) || 0;
+        totalHacerSer += parseFloat(unidad.Porcentaje_saber_ser) || 0;
+        totalSemanas += parseFloat(unidad.Semanas) || 0;
+
         unidadesApRows += `
                     <tr>
                         <td>${index + 1}</td> <!-- Número incremental -->
@@ -182,13 +192,12 @@ async function showDetails(id_asignatura) {
                 <tbody>
                     ${unidadesApRows} <!-- Aquí se insertan las filas dinámicas -->
                     <tr>
+                        <td colspan="2"><b>Totales</b></td>
+                        <td><b>${totalSemanas}</b></td>
                         <td></td>
                         <td></td>
-                        <td><b>15</b></td>
-                        <td></td>
-                        <td></td>
-                        <td><b>40%</b></td>
-                        <td><b>60%</b></td>
+                        <td><b>${totalSaber.toFixed(0)}%</b></td>
+                        <td><b>${totalHacerSer.toFixed(0)}%</b></td>
                     </tr>
                 </tbody>
             </table>

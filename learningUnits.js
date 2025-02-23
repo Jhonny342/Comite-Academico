@@ -39,6 +39,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   );
 
+  const validationModal = new bootstrap.Modal(
+    document.getElementById("validationModal"),
+    {
+      backdrop: "static",
+    }
+  );
+
   ValidateDataUnitsExistInSessionStorage(
     units,
     helperModal,
@@ -94,7 +101,8 @@ document.addEventListener("DOMContentLoaded", function () {
     URL,
     loadingModal,
     errorModal,
-    successModal
+    successModal,
+    validationModal
   );
 });
 
@@ -105,10 +113,36 @@ function ClickButtonEvent(
   URL,
   loadingModal,
   errorModal,
-  successModal
+  successModal,
+  validationModal
 ) {
   postUnitsButton.addEventListener("click", async () => {
+    let allUnitsProcessedSuccessfully = true;
+
+    // Variables para acumular los porcentajes totales
+    let totalSaber = 0;
+    let totalHacerSer = 0;
+
+    // Primero, recopilar y sumar los porcentajes de todas las unidades
+    for (let i = 1; i <= units; i++) {
+      const percentKnow =
+        parseInt(document.getElementById(`saber${i}`).value) || 0;
+      const percentDo =
+        parseInt(document.getElementById(`hacerSer${i}`).value) || 0;
+
+      totalSaber += percentKnow;
+      totalHacerSer += percentDo;
+    }
+
+    // Validar que la suma total sea 100
+    if (totalSaber + totalHacerSer !== 100) {
+      loadingModal.hide();
+      validationModal.show();
+      allUnitsProcessedSuccessfully = false;
+      return; // Detener el proceso si la validación falla
+    }
     loadingModal.show();
+    // Si la validación es exitosa, procesar cada unidad
     for (let i = 1; i <= units; i++) {
       const competence = document.getElementById(`competence${i}`).value;
       const weeks = document.getElementById(`weeks${i}`).value;
@@ -136,15 +170,18 @@ function ClickButtonEvent(
         console.error("Error al insertar la unidad en el servidor:", error);
         loadingModal.hide();
         errorModal.show();
-        return; // Salir del bucle y no continuar con las siguientes unidades
-      } finally {
-        loadingModal.hide();
-        successModal.show();
-        await CleantSessionStorage();
-        setTimeout(() => {
-          NavigateToOtherPage("courseRecords.html");
-        }, 3000);
+        allUnitsProcessedSuccessfully = false;
+        return; // Salir del bucle si hay un error
       }
+    }
+
+    if (allUnitsProcessedSuccessfully) {
+      loadingModal.hide();
+      successModal.show();
+      await CleantSessionStorage();
+      setTimeout(() => {
+        NavigateToOtherPage("courseRecords.html");
+      }, 3000);
     }
   });
 }
@@ -193,11 +230,13 @@ async function PostLearningUnits(URL, unitData) {
     console.error(error);
   }
 }
+
 async function CleantSessionStorage() {
   await sessionStorage.removeItem("id_subject");
   await sessionStorage.removeItem("selectedUnits");
   await sessionStorage.removeItem("quantity_units");
 }
+
 const NavigateToOtherPage = (pageRoute) => (window.location.href = pageRoute);
 
 function HelperModalTime(helperModal) {
